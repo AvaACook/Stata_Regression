@@ -1,0 +1,66 @@
+-------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  \\sscwin\dfsroot\users\aacook4\Desktop\410 Problem Sets\PS 7 Q3.log
+  log type:  text
+ opened on:  11 Dec 2022, 15:07:09
+
+. clear
+
+. 
+. use "\\sscwin\dfsroot\users\aacook4\Desktop\410 Problem Sets\minwage.dta"
+
+. 
+. *Question 3
+. *Part i
+. reg gwage232 gmwage gmwage_1
+
+      Source |       SS           df       MS      Number of obs   =       610
+-------------+----------------------------------   F(2, 607)       =    119.56
+       Model |  .015194309         2  .007597155   Prob > F        =    0.0000
+    Residual |  .038570284       607  .000063542   R-squared       =    0.2826
+-------------+----------------------------------   Adj R-squared   =    0.2802
+       Total |  .053764594       609  .000088283   Root MSE        =    .00797
+
+------------------------------------------------------------------------------
+    gwage232 | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      gmwage |   .1504044   .0097341    15.45   0.000     .1312879     .169521
+    gmwage_1 |  -.0035684   .0097341    -0.37   0.714    -.0226849    .0155481
+       _cons |    .003008   .0003279     9.17   0.000     .0023639     .003652
+------------------------------------------------------------------------------
+
+. *The immediate effect of a 1 unit increase in gmwage on gwage 232 is estimated to b
+> e .1504. The immediate effect is statistically significant even at the 1% level, si
+> nce it has a p-value = 0 < .01
+. 
+. *Part ii
+. *The predicted one-period lagged effect is estimated to be -.0035. The one-period l
+> agged effect is not statistically significant at any of the standard signficance le
+> vels. The p-value on the estimated one-period lagged effect is .714, which implies 
+> that there is a 71.4% chance of observing a statistic at least as extreme as -.0035
+> , and therefore the gmwage_1 is not very statistically significant.
+. 
+. *Part iii
+. lincom gmwage+gmwage_1
+
+ ( 1)  gmwage + gmwage_1 = 0
+
+------------------------------------------------------------------------------
+    gwage232 | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         (1) |    .146836   .0138754    10.58   0.000     .1195863    .1740857
+------------------------------------------------------------------------------
+
+. *We use the lincom command to do a point estimate of the sum of coefficients on gmw
+> age and gmwage_1. The resulting variable will have a coefficient of delta0 + delta1
+> , which is the long-run effect of a one unit permanent increase in gmwage starting 
+> at time t.
+. *We obtain a coefficient of .1468, which implies that a 1 unit increase in gmwage s
+> tarting at time t generates a .1468 unit change in gmwage232 (holding all other fac
+> tors constant and interpreting in a causal manner.)
+. *The coefficient on the newly defined variable is statistically significant even at
+>  the 1% level, because it has a p-value = 0 < .01.
+. 
+end of do-file
+
+. exit, clear

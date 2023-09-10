@@ -1,0 +1,163 @@
+-------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  \\sscwin\dfsroot\users\aacook4\Desktop\410 Problem Sets\PS 7 Q2.log
+  log type:  text
+ opened on:  11 Dec 2022, 14:46:36
+
+. clear
+
+. 
+. use "\\sscwin\dfsroot\users\aacook4\Desktop\410 Problem Sets\htv.dta"
+
+. 
+. *Question 2
+. *Part i
+. reg lwage educ, r
+
+Linear regression                               Number of obs     =      1,230
+                                                F(1, 1228)        =     182.74
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1616
+                                                Root MSE          =     .54387
+
+------------------------------------------------------------------------------
+             |               Robust
+       lwage | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .1013613   .0074982    13.52   0.000     .0866506    .1160719
+       _cons |   1.092319   .0991578    11.02   0.000     .8977817    1.286857
+------------------------------------------------------------------------------
+
+. *Without controlling for other factors, the 95% confidence interval for the return 
+> to another year of education is [.0867, .1161]
+. 
+. *Part ii
+. corr educ ctuit
+(obs=1,230)
+
+             |     educ    ctuit
+-------------+------------------
+        educ |   1.0000
+       ctuit |  -0.0169   1.0000
+
+
+. *The correlation between educ and ctuit is only -.0169. This implies that there is 
+> a very weak correlation between educ and ctuit. Since the correlation between educ 
+> and ctuit is practically zero, we cannot say that ctuit fulfills the relevance cond
+> ition for an IV.
+. *If we wanted to use ctuit as an IV for educ, we would need a nonzero correlation b
+> etween the two. Therefore ctuit is not a possible IV for educ in this model.
+. 
+. *Part iii
+. reg lwage educ exper expersq ne nc west ne18 nc18 west18 urban urban18, r
+
+Linear regression                               Number of obs     =      1,230
+                                                F(11, 1218)       =      25.23
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2186
+                                                Root MSE          =     .52719
+
+------------------------------------------------------------------------------
+             |               Robust
+       lwage | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .1371483   .0100981    13.58   0.000     .1173368    .1569599
+       exper |   .1123554   .0257243     4.37   0.000     .0618865    .1628243
+     expersq |  -.0030404   .0011594    -2.62   0.009     -.005315   -.0007659
+          ne |  -.0168028   .0910685    -0.18   0.854    -.1954714    .1618658
+          nc |  -.0174304   .0713778    -0.24   0.807    -.1574675    .1226066
+        west |   .0175429   .0926163     0.19   0.850    -.1641622    .1992481
+        ne18 |   .1563607   .0921372     1.70   0.090    -.0244045    .3371259
+        nc18 |   .0113699   .0744449     0.15   0.879    -.1346846    .1574243
+      west18 |   -.029576   .0996236    -0.30   0.767    -.2250288    .1658769
+       urban |   .2046369   .0414881     4.93   0.000     .1232409     .286033
+     urban18 |   .1260197   .0528489     2.38   0.017     .0223347    .2297046
+       _cons |  -.5074853   .2503133    -2.03   0.043    -.9985783   -.0163922
+------------------------------------------------------------------------------
+
+. *The estimated return to a year of education is equal to the OLS coefficient in fro
+> nt of educ in the mdoel, which is .1371.
+. *We interpret this coefficient in a causal manner: controlling for all other factor
+> s, an additional year of education causes a 13.71% increase in wage.
+. 
+. *Part iv
+. reg educ ctuit exper expersq ne nc west ne18 nc18 west18 urban urban18, r
+
+Linear regression                               Number of obs     =      1,230
+                                                F(11, 1218)       =     137.61
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.5088
+                                                Root MSE          =     1.6575
+
+------------------------------------------------------------------------------
+             |               Robust
+        educ | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       ctuit |  -.1652227   .0749731    -2.20   0.028    -.3123134   -.0181319
+       exper |   -.873831   .0735128   -11.89   0.000    -1.018057   -.7296052
+     expersq |   .0156522   .0034919     4.48   0.000     .0088013     .022503
+          ne |  -.3745971   .3553196    -1.05   0.292    -1.071703    .3225093
+          nc |  -.1415143   .2752213    -0.51   0.607    -.6814747    .3984461
+        west |   .6220028   .2901246     2.14   0.032     .0528035    1.191202
+        ne18 |    .653344   .3490274     1.87   0.061    -.0314176    1.338106
+        nc18 |   .2322316   .2773732     0.84   0.403    -.3119507    .7764139
+      west18 |  -.4480626   .3078447    -1.46   0.146    -1.052027    .1559021
+       urban |  -.0769929   .1151254    -0.67   0.504     -.302859    .1488732
+     urban18 |  -.9885221   .1254737    -7.88   0.000    -1.234691   -.7423536
+       _cons |   21.24249   .4142453    51.28   0.000     20.42978     22.0552
+------------------------------------------------------------------------------
+
+. *We see that ctuit has a statistically significant effect on educ at the 5% level. 
+> The p-value for ctuit is .028, which is less than the significance level .05.
+. 
+. *Part v
+. ivregress 2sls lwage (educ=ctuit) exper expersq ne nc west ne18 nc18 west18 urban u
+> rban18, r
+
+Instrumental variables 2SLS regression            Number of obs   =      1,230
+                                                  Wald chi2(11)   =     106.34
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.1196
+                                                  Root MSE        =     .55685
+
+------------------------------------------------------------------------------
+             |               Robust
+       lwage | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .2500082    .116888     2.14   0.032     .0209121    .4791044
+       exper |   .2094245   .1024095     2.04   0.041     .0087056    .4101433
+     expersq |  -.0047509    .002106    -2.26   0.024    -.0088786   -.0006233
+          ne |   .0289029     .11834     0.24   0.807    -.2030393    .2608452
+          nc |   .0028895   .0873795     0.03   0.974    -.1683711    .1741502
+        west |  -.0543256   .1229282    -0.44   0.659    -.2952605    .1866093
+        ne18 |   .0760555    .138923     0.55   0.584    -.1962286    .3483397
+        nc18 |  -.0209026   .0948016    -0.22   0.825    -.2067103    .1649051
+      west18 |   .0234556   .1178127     0.20   0.842     -.207453    .2543643
+       urban |   .2146702   .0452873     4.74   0.000     .1259086    .3034318
+     urban18 |   .2373826   .1264596     1.88   0.060    -.0104736    .4852388
+       _cons |  -2.894232   2.468156    -1.17   0.241    -7.731729    1.943264
+------------------------------------------------------------------------------
+Instrumented: educ
+ Instruments: exper expersq ne nc west ne18 nc18 west18 urban urban18 ctuit
+
+. *The 95% confidence interval for the return to education using ctuit as an IV for e
+> duc is [.0209, .4791]. We note that this is a much larger confidence interval than 
+> the 95% confidence interval from part iii. This is because when we use ctuit as an 
+> IV for educ, the robust standard error is larger than the robust standard error for
+>  educ.
+. 
+. *Part vi
+. *I still think that ctuit is not the best IV for educ, since the relevance conditio
+> n is barely met.
+. * corr(educ, ctuit) = -.0169, which does not equal 0 but is close to 0, which impli
+> es that educ and ctuit are only weakly correlated.
+. *The information given in Part vi lets us assume corr(ctuit,u) = 0. Therefore the e
+> xogenetiy condition is met.
+. *Since the relevance condition is barely met, I do not find the IV procedure from P
+> art iv convincing.
+. 
+end of do-file
+
+. 
+
+. exit, clear
